@@ -2,6 +2,7 @@ import express from "express";
 import asyncHandler from "express-async-handler";
 import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -45,13 +46,29 @@ router.post('/login', asyncHandler(async (req, res) => {
       }
 }));
 
-router.put('/update', async (req, res) => {
-    try {
-        await res.send('Update route');
-    } catch (error) {
+router.put('/update', authMiddleware, asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
         
-    }
-});
+        if (req.body.password) {
+            user.password = req.body.password || user.password;
+        }
+
+        const updatedUser = await user.save();
+
+        res.status(200).json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            token: generateToken(updatedUser._id)
+        });
+    } 
+}));
 
 router.delete('/:id', async (req, res) => {
     try {
@@ -61,12 +78,33 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
+router.get(
+    '/',
+    authMiddleware,
+    asyncHandler(async (req, res) => {
+      const users = await User.find({});
+  
+      if (users) {
+        res.status(200).json(users);
+      } else {
+        res.status(500);
+  
+        throw new Error('No users found at the moment');
+      }
+    })
+);
+
+router.get('/profile', authMiddleware, asyncHandler(async (req, res) => {
     try {
-        await res.send('Fetch users');
+        const user = await User.findById(req.user._id).populate('books');
+
+        if (!user) throw new Error("You don't have profile yet!");
+
+        res.status(200).json(user);
     } catch (error) {
-        
+        res.status(500);
+        throw new Error('Something went wrong!');
     }
-});
+}));
 
 export default router;

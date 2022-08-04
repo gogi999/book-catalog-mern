@@ -7,17 +7,17 @@ const bookSchema = mongoose.Schema({
     },
     author: {
         type: String,
-        required: true
+        required: [true, 'Book author is required!']
     },
     title: {
         type: String,
-        required: true
-    },/*
+        required: [true, 'Book title is required!']
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }*/
+    }
 }, {
     timestamps: true
 });

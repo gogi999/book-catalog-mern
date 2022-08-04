@@ -11,53 +11,59 @@ const Books = () => {
         dispatch(fetchBooksAction());
     }, [dispatch]);
 
-  return (
-    <div>
-      <div className='row'>
-        <div className='col'>
-          <table className='table table-hover'>
-            <thead>
-              <tr>
-                <th scope='col'>Author</th>
-                <th scope='col'>Book Name</th>
-                <th scope='col'>Action</th>
-                <th scope='col'>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <Loading />
-              ) : (
-                <>
-                    {books && books.map((book, i) => (
-                        <>
-                            <tr className='table-dark' key={i}>
-                                <th scope='row'>{book.author}</th>
-                                <td>{book.title}</td>
-                                <td>
+    return (
+      <div>
+        <div className='row'>
+          <div className='col'>
+            <table className='table table-hover'>
+              <thead>
+                <tr>
+                  <th scope='col'>Author</th>
+                  <th scope='col'>Book Name</th>
+                  <th scope='col'>Action</th>
+                  <th scope='col'>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <>
+                    {books &&
+                      books.map((book, i) => {
+                        return (
+                          <>
+                            <tr className='table-dark'>
+                              <th scope='row' key={i}>{book.title}</th>
+                              <td>{book.author}</td>
+                              <td>
                                 <i
-                                    className='fas fa-trash '
-                                    style={{ color: 'red', cursor: 'progress' }}></i>
-                                </td>
-                                <td>
+                                  className='fas fa-trash '
+                                  style={{
+                                    color: 'red',
+                                    cursor: 'progress',
+                                  }}></i>
+                              </td>
+                              <td>
                                 <i
-                                    className='far fa-edit'
-                                    style={{
+                                  className='far fa-edit'
+                                  style={{
                                     color: 'yellow',
                                     cursor: 'progress',
-                                    }}></i>
-                                </td>
+                                  }}></i>
+                              </td>
                             </tr>
-                        </>
-                    ))}
-                </>
-              )}
-            </tbody>
-          </table>
+                          </>
+                        );
+                      })}
+                  </>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default Books;

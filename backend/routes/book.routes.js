@@ -5,8 +5,15 @@ import Book from "../models/book.model.js";
 
 const router = express.Router();
 
-router.post('/', asyncHandler(async (req, res) => {
-    const book = await Book.create(req.body);
+router.post('/', authMiddleware, asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+    const book = await Book.create({
+        title: req.body.title,
+        category: req.body.category,
+        author: req.body.author,
+        createdBy: userId
+    });
 
     if (book) {
         res.status(201).json(book);
