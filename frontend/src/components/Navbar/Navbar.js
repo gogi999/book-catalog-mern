@@ -7,7 +7,7 @@ import { logoutUserAction } from '../../redux/actions/users/usersActions';
 
 const Navbar = ({ history }) => {
   const dispatch = useDispatch();
-  const { userInfo, loading, error } = useSelector((state) => state.userAuth);
+  const { userInfo } = useSelector((state) => state.userAuth);
 
   const logoutHandler = () => {
     dispatch(logoutUserAction());

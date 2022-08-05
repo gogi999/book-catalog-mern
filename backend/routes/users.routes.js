@@ -46,7 +46,7 @@ router.post('/login', asyncHandler(async (req, res) => {
       }
 }));
 
-router.put('/update', authMiddleware, asyncHandler(async (req, res) => {
+router.put('/profile/update', authMiddleware, asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findById(req.user._id);

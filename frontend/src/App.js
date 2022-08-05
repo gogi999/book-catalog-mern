@@ -8,6 +8,7 @@ import Register from './components/Users/Register';
 import Login from './components/Users/Login';
 import Home from './components/Home/Home';
 import Profile from './components/Profile/Profile';
+import UpdateProfile from './components/Profile/UpdateProfile';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route exact path="/addbook" component={AddBook} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/user-update" component={UpdateProfile} />
         </Switch>
       </BrowserRouter>
     </div>

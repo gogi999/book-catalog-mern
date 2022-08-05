@@ -9,7 +9,10 @@ import {
     USER_LOGOUT_SUCCESS,
     USER_PROFILE_REQUEST,
     USER_PROFILE_SUCCESS,
-    USER_PROFILE_FAIL
+    USER_PROFILE_FAIL,
+    USER_UPDATE_REQUEST,
+    USER_UPDATE_SUCCESS,
+    USER_UPDATE_FAIL
 } from '../actionTypes';
 
 export const registerUserAction = (name, email, password) => {
@@ -109,6 +112,39 @@ export const getUserProfileAction = () => async (dispatch, getState) => {
         dispatch({
             type: USER_PROFILE_FAIL,
             payload: error.response && error.response.data.message
+        });
+    }
+}
+
+export const updateUserProfileAction = (name, email, password) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_UPDATE_REQUEST
+        });
+
+        // Get the user token from store
+        const { userInfo } = getState().userAuth;
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.put('/api/users/profile/update', { name, email, password }, config);
+
+        dispatch({
+            type: USER_UPDATE_SUCCESS,
+            payload: data
+        });
+    } catch (error) {
+        dispatch({
+            type: USER_UPDATE_FAIL,
+            payload: 
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message
         });
     }
 }
